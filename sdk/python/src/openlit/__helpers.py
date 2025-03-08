@@ -169,6 +169,8 @@ def fetch_pricing_info(pricing_json=None):
         dict: The pricing json
     """
     if pricing_json:
+        if isinstance(pricing_json, dict):
+            return pricing_json
         is_url = urlparse(pricing_json).scheme != ""
         if is_url:
             pricing_url = pricing_json
