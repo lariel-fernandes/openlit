@@ -129,7 +129,8 @@ def converse(version, environment, application_name, tracer,
                     cost = get_chat_model_cost(request_model, pricing_info,
                                                 input_tokens, output_tokens)
 
-                    llm_response = response_dict.get('output').get('message').get('content')[0].get('text')
+                    content = response_dict.get('output').get('message').get('content')[0]
+                    llm_response = content.get('text') or content.get('toolUse')
 
                     # Set base span attribues (OTel Semconv)
                     span.set_attribute(TELEMETRY_SDK_NAME, 'openlit')
