@@ -9,6 +9,7 @@ from botocore.response import StreamingBody
 from botocore.exceptions import ReadTimeoutError, ResponseStreamingError
 from urllib3.exceptions import ProtocolError as URLLib3ProtocolError
 from urllib3.exceptions import ReadTimeoutError as URLLib3ReadTimeoutError
+from opentelemetry import context
 from opentelemetry.trace import SpanKind, Status, StatusCode
 from opentelemetry.sdk.resources import SERVICE_NAME, TELEMETRY_SDK_NAME, DEPLOYMENT_ENVIRONMENT
 from openlit.__helpers import (
@@ -98,7 +99,7 @@ def converse(version, environment, application_name, tracer,
             """
 
             server_address, server_port = set_server_address_and_port(instance, 'aws.amazon.com', 443)
-            request_model = method_kwargs.get('modelId', 'amazon.titan-text-express-v1')
+            request_model = context.get_value(SemanticConvetion.GEN_AI_REQUEST_MODEL) or method_kwargs.get('modelId', 'amazon.titan-text-express-v1')
 
             span_name = f'{SemanticConvetion.GEN_AI_OPERATION_TYPE_CHAT} {request_model}'
 
