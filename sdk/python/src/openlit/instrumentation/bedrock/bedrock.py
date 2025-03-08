@@ -2,6 +2,7 @@
 Module for monitoring Amazon Bedrock API calls.
 """
 
+import json
 import logging
 import time
 from botocore.response import StreamingBody
@@ -130,7 +131,7 @@ def converse(version, environment, application_name, tracer,
                                                 input_tokens, output_tokens)
 
                     content = response_dict.get('output').get('message').get('content')[0]
-                    llm_response = content.get('text') or content.get('toolUse')
+                    llm_response = json.dumps(tool) if (tool := content.get('toolUse')) else content.get('text')
 
                     # Set base span attribues (OTel Semconv)
                     span.set_attribute(TELEMETRY_SDK_NAME, 'openlit')
