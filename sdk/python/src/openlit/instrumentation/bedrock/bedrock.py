@@ -111,7 +111,11 @@ def converse(version, environment, application_name, tracer,
                 response_dict = response_as_dict(response)
 
                 try:
-                    message_prompt = method_kwargs.get('messages', '')
+                    message_prompt = method_kwargs.get('messages') or []
+
+                    if system_prompt := method_kwargs.get("system"):
+                        message_prompt = [{"role": "system", "content": system_prompt}] + message_prompt
+
                     formatted_messages = []
                     for message in message_prompt:
                         role = message['role']
