@@ -116,17 +116,7 @@ def converse(version, environment, application_name, tracer,
                     if system_prompt := method_kwargs.get("system"):
                         message_prompt = [{"role": "system", "content": system_prompt}] + message_prompt
 
-                    formatted_messages = []
-                    for message in message_prompt:
-                        role = message['role']
-                        content = message['content']
-
-                        if isinstance(content, list):
-                            content_str = ", ".join(f'text: {item["text"]}' for item in content if "text" in item)
-                            formatted_messages.append(f'{role}: {content_str}')
-                        else:
-                            formatted_messages.append(f'{role}: {content}')
-                    prompt = '\n'.join(formatted_messages)
+                    prompt = [(msg["role"], msg["content"][0]["text"]) for msg in message_prompt]
 
                     input_tokens = response_dict.get('usage').get('inputTokens')
                     output_tokens = response_dict.get('usage').get('outputTokens')
@@ -202,12 +192,14 @@ def converse(version, environment, application_name, tracer,
                                         version)
 
                     if capture_message_content:
-                        span.add_event(
-                            name=SemanticConvetion.GEN_AI_CONTENT_PROMPT_EVENT,
-                            attributes={
-                                SemanticConvetion.GEN_AI_CONTENT_PROMPT: prompt,
-                            },
-                        )
+                        for i, (role, msg) in enumerate(prompt):
+                            span.add_event(
+                                name=SemanticConvetion.GEN_AI_CONTENT_PROMPT_EVENT + "." + str(i),
+                                attributes={
+                                    SemanticConvetion.GEN_AI_CONTENT_ROLE: role,
+                                    SemanticConvetion.GEN_AI_CONTENT_PROMPT: msg,
+                                },
+                            )
                         span.add_event(
                             name=SemanticConvetion.GEN_AI_CONTENT_COMPLETION_EVENT,
                             attributes={

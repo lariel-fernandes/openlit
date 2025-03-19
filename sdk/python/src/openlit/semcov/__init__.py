@@ -158,6 +158,7 @@ class SemanticConvetion:
     GEN_AI_TOOL_CALLS = "gen_ai.response.tool_calls"
 
     # GenAI Content
+    GEN_AI_CONTENT_ROLE = "gen_ai.role"
     GEN_AI_CONTENT_PROMPT_EVENT = "gen_ai.content.prompt"
     GEN_AI_CONTENT_PROMPT = "gen_ai.prompt"
     GEN_AI_CONTENT_COMPLETION_EVENT = "gen_ai.content.completion"
