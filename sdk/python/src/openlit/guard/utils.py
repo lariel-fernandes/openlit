@@ -9,8 +9,7 @@ from typing import Optional, Tuple
 from pydantic import BaseModel
 from opentelemetry.metrics import get_meter
 from opentelemetry.sdk.resources import TELEMETRY_SDK_NAME
-from anthropic import Anthropic
-from openai import OpenAI
+
 from openlit.semcov import SemanticConvetion
 
 # Initialize logger for logging potential issues and operations
@@ -81,6 +80,8 @@ def llm_response(provider: str, prompt: str, model: str, base_url: str) -> str:
 
 def llm_response_openai(prompt: str, model: str, base_url: str) -> str:
     """Function to make LLM call to OpenAI"""
+    from openai import OpenAI
+    
     client = OpenAI(base_url=base_url)
 
     if model is None:
@@ -101,6 +102,8 @@ def llm_response_openai(prompt: str, model: str, base_url: str) -> str:
 
 def llm_response_anthropic(prompt: str, model: str) -> str:
     """Function to make LLM call to Anthropic"""
+    from anthropic import Anthropic
+
     client = Anthropic()
 
     if model is None:
